@@ -28,17 +28,9 @@ public class Societa {
 	@Column(name = "dataFondazione")
 	private Date dataFondazione;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "societa")
-	private Set<Dipendente> dipendenti = new HashSet<>();
+	private Set<Dipendente> dipendenti = new HashSet<Dipendente>();
 
 	public Societa() {
-	}
-
-	public Societa(String ragioneSociale, String indirizzo, Date dataFondazione, Set<Dipendente> dipendenti) {
-		super();
-		this.ragioneSociale = ragioneSociale;
-		this.indirizzo = indirizzo;
-		this.dataFondazione = dataFondazione;
-		this.dipendenti = dipendenti;
 	}
 
 	public Societa(String ragioneSociale, String indirizzo, Date dataFondazione) {
@@ -91,7 +83,7 @@ public class Societa {
 	@Override
 	public String toString() {
 		return "Societa [id=" + id + ", ragioneSociale=" + ragioneSociale + ", indirizzo=" + indirizzo
-				+ ", dataFondazione=" + dataFondazione + ", dipendenti=" + dipendenti + "]";
+				+ ", dataFondazione=" + dataFondazione + "]";
 	}
 
 }
