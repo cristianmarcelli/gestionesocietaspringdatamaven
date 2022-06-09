@@ -53,8 +53,10 @@ public class BatteriaDiTestService {
 
 		Dipendente dipendente = new Dipendente("SAVERIO " + nowInMillisecondi, "CARELLOTTI " + nowInMillisecondi,
 				new SimpleDateFormat("dd-MM-yyyy").parse("24-05-1999"), 54000);
+
 		dipendente.setSocieta(Societa2);
 		dipendenteService.inserisciNuovo(dipendente);
+
 		if (dipendente.getId() == null && dipendente.getId() < 1)
 			throw new RuntimeException("testInserisciNuovoDipendente... failed: inserimento dipendente fallito");
 
@@ -128,6 +130,84 @@ public class BatteriaDiTestService {
 					"testRimozioneSocietaVaiInRollback...failed. Impossibile rimuovere: la societa ha dipendenti assegnati");
 
 		System.out.println("----- FINE testRimozioneSocietaVaiInRollback -----");
+	}
+
+	public void testModificaDipendente() throws Exception {
+		System.out.println("----- INIZIO testModificaDipendente -----");
+
+		Long nowInMillisecondi = new Date().getTime();
+
+		Societa nuovaSocieta = new Societa("SocietaNuova" + nowInMillisecondi, "Via Roma, 20" + nowInMillisecondi,
+				new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2000"));
+		if (nuovaSocieta.getId() != null)
+			throw new RuntimeException("testModificaDipendente...failed: transient object con id valorizzato");
+
+		societaService.inserisciNuovo(nuovaSocieta);
+		if (nuovaSocieta.getId() == null || nuovaSocieta.getId() < 1)
+			throw new RuntimeException("testModificaDipendente...failed: inserimento fallito");
+
+		Dipendente dipendente = new Dipendente("SAVERIO " + nowInMillisecondi, "CARELLOTTI " + nowInMillisecondi,
+				new SimpleDateFormat("dd-MM-yyyy").parse("24-05-1999"), 54000);
+
+		dipendente.setSocieta(nuovaSocieta);
+		dipendenteService.inserisciNuovo(dipendente);
+
+		if (dipendente.getId() == null && dipendente.getId() < 1)
+			throw new RuntimeException("testModificaDipendente... failed: inserimento dipendente fallito");
+
+		System.out.println("Prima della modifica il nome del dipendente: " + dipendente.getNome());
+
+		dipendente.setNome("FRANCO " + nowInMillisecondi);
+		dipendenteService.aggiorna(dipendente);
+
+		if (dipendente.getNome() == "SAVERIO")
+			throw new RuntimeException("testModificaDipendente... failed: modifica dipendente fallita");
+
+		System.out.println("Dopo della modifica il nome del dipendente: " + dipendente.getNome());
+
+		System.out.println("----- FINE testModificaDipendente -----");
+	}
+
+	public void testCercaSocietaConDipendentiConRALMaggioreTrentamila() throws Exception {
+		System.out.println("----- INIZIO testCercaSocietaConDipendentiConRALMaggioreTrentamila -----");
+
+		Long nowInMillisecondi = new Date().getTime();
+
+		Societa nuovaSocieta = new Societa("SocietaNuova" + nowInMillisecondi, "Via Roma, 20" + nowInMillisecondi,
+				new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2000"));
+		if (nuovaSocieta.getId() != null)
+			throw new RuntimeException(
+					"testCercaSocietaConDipendentiConRALMaggioreTrentamila...failed: transient object con id valorizzato");
+
+		societaService.inserisciNuovo(nuovaSocieta);
+		if (nuovaSocieta.getId() == null || nuovaSocieta.getId() < 1)
+			throw new RuntimeException(
+					"testCercaSocietaConDipendentiConRALMaggioreTrentamila...failed: inserimento fallito");
+
+		Dipendente dipendente = new Dipendente("SAVERIO " + nowInMillisecondi, "CARELLOTTI " + nowInMillisecondi,
+				new SimpleDateFormat("dd-MM-yyyy").parse("24-05-1999"), 54000);
+
+		dipendente.setSocieta(nuovaSocieta);
+		dipendenteService.inserisciNuovo(dipendente);
+
+		if (dipendente.getId() == null && dipendente.getId() < 1)
+			throw new RuntimeException(
+					"testCercaSocietaConDipendentiConRALMaggioreTrentamila... failed: inserimento dipendente fallito");
+
+		int ralInput = 30000;
+		
+		List<Societa> listaSocietaEsempio = societaService
+				.cercaSocietaConAlmenoUnDipendenteConRALMaggioreDiTrentamila(ralInput);
+
+		for (Societa societaItem : listaSocietaEsempio) {
+			System.out.println(societaItem);
+		}
+
+		if (listaSocietaEsempio.size() < 1)
+			throw new RuntimeException("testFindByExampleSocieta failed: societa non trovata");
+
+		System.out.println("----- FINE testCercaSocietaConDipendentiConRALMaggioreTrentamila -----");
+
 	}
 
 }

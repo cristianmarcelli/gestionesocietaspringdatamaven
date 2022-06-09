@@ -20,4 +20,6 @@ public interface SocietaService {
 	
 	public void removeConEccezione(Societa societaInstance);
 	
+	public List<Societa> cercaSocietaConAlmenoUnDipendenteConRALMaggioreDiTrentamila(int ralInput);
+	
 }

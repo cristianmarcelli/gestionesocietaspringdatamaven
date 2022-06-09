@@ -62,4 +62,9 @@ public class SocietaServiceImpl implements SocietaService {
 		throw new RuntimeException("Eccezione di prova transazione");
 	}
 
+	@Override
+	public List<Societa> cercaSocietaConAlmenoUnDipendenteConRALMaggioreDiTrentamila(int ralInput) {
+		return societaRepository.findAllDistinctByDipendenti_RedditoAnnuoLordoGreaterThan(ralInput);
+	}
+
 }

@@ -24,7 +24,9 @@ public class GestionesocietaspringdatamavenApplication implements CommandLineRun
 //		batteriaDiTestService.testInserisciNuovaSocieta();
 //		batteriaDiTestService.testInserisciNuovoDipendente();
 //		batteriaDiTestService.testFindByExampleSocieta();
-		batteriaDiTestService.testRimozioneSocietaVaiInRollback();
+//		batteriaDiTestService.testRimozioneSocietaVaiInRollback();
+//		batteriaDiTestService.testModificaDipendente();
+		batteriaDiTestService.testCercaSocietaConDipendentiConRALMaggioreTrentamila();
 
 		System.out.println("################ FINE   #################");
 	}
