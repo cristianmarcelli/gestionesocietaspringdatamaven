@@ -73,13 +73,16 @@ public class BatteriaDiTestService {
 
 		societaService.inserisciNuovo(Societa3);
 		if (Societa3.getId() == null || Societa3.getId() < 1)
-			throw new RuntimeException("testFindByExampleSocieta...failed: inserimento fallito");
+			throw new RuntimeException("testFindByExampleSocieta...failed");
 
 		List<Societa> listaSocietaEsempio = societaService.findByExample(Societa3);
 
 		for (Societa societaItem : listaSocietaEsempio) {
 			System.out.println(societaItem);
 		}
+
+		if (listaSocietaEsempio.size() < 1)
+			throw new RuntimeException("testFindByExampleSocieta failed: societa non trovata");
 
 		System.out.println("----- FINE testFindByExampleSocieta -----");
 	}
