@@ -195,7 +195,7 @@ public class BatteriaDiTestService {
 					"testCercaSocietaConDipendentiConRALMaggioreTrentamila... failed: inserimento dipendente fallito");
 
 		int ralInput = 30000;
-		
+
 		List<Societa> listaSocietaEsempio = societaService
 				.cercaSocietaConAlmenoUnDipendenteConRALMaggioreDiTrentamila(ralInput);
 
@@ -204,10 +204,43 @@ public class BatteriaDiTestService {
 		}
 
 		if (listaSocietaEsempio.size() < 1)
-			throw new RuntimeException("testFindByExampleSocieta failed: societa non trovata");
+			throw new RuntimeException(
+					"testCercaSocietaConDipendentiConRALMaggioreTrentamila failed: nessuna societa presente");
 
 		System.out.println("----- FINE testCercaSocietaConDipendentiConRALMaggioreTrentamila -----");
 
 	}
 
+	public void testCercaDipendentePiuAnzianoSocietaFondataPrimaDelNovanta() throws Exception {
+		System.out.println("----- INIZIO testCercaDipendentePiuAnzianoSocietaFondataPrimaDelNovanta -----");
+
+		Long nowInMillisecondi = new Date().getTime();
+
+		Societa nuovaSocieta = new Societa("SocietaNuova" + nowInMillisecondi, "Via Roma, 20" + nowInMillisecondi,
+				new SimpleDateFormat("dd-MM-yyyy").parse("01-01-1600"));
+		if (nuovaSocieta.getId() != null)
+			throw new RuntimeException(
+					"testCercaDipendentePiuAnzianoSocietaFondataPrimaDelNovanta...failed: transient object con id valorizzato");
+
+		societaService.inserisciNuovo(nuovaSocieta);
+		if (nuovaSocieta.getId() == null || nuovaSocieta.getId() < 1)
+			throw new RuntimeException(
+					"testCercaDipendentePiuAnzianoSocietaFondataPrimaDelNovanta...failed: inserimento fallito");
+
+		Dipendente dipendente = new Dipendente("LUCIA " + nowInMillisecondi, "CALABRIA " + nowInMillisecondi,
+				new SimpleDateFormat("dd-MM-yyyy").parse("24-05-1950"), 54000);
+
+		dipendente.setSocieta(nuovaSocieta);
+		dipendenteService.inserisciNuovo(dipendente);
+
+		if (dipendente.getId() == null && dipendente.getId() < 1)
+			throw new RuntimeException(
+					"testCercaSocietaConDipendentiConRALMaggioreTrentamila... failed: inserimento dipendente fallito");
+
+		Dipendente dipendenteEsempio = dipendenteService.cercaDipendentePiuAnzianoInUnaSocietaFondataPrimaDelNovanta();
+
+		System.out.println(dipendenteEsempio);
+
+		System.out.println("----- FINE testCercaDipendentePiuAnzianoSocietaFondataPrimaDelNovanta -----");
+	}
 }

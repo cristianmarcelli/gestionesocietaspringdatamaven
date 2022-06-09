@@ -56,4 +56,9 @@ public class DipendenteServiceImpl implements DipendenteService {
 		return (List<Dipendente>) dipendenteRepository.findAll(Example.of(example, matcher));
 	}
 
+	@Override
+	public Dipendente cercaDipendentePiuAnzianoInUnaSocietaFondataPrimaDelNovanta() {
+		return dipendenteRepository.findDipendentePiuAnzianoDiUnaSocietaWithDateFoundedBefore();
+	}
+
 }
