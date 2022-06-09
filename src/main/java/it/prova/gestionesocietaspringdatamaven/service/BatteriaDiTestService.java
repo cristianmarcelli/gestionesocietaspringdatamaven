@@ -36,4 +36,28 @@ public class BatteriaDiTestService {
 		System.out.println("----- FINE testInserisciNuovaSocieta -----");
 	}
 
+	public void testInserisciNuovoDipendente() throws Exception {
+		System.out.println("----- INIZIO testInserisciNuovoDipendente -----");
+
+		Long nowInMillisecondi = new Date().getTime();
+
+		Societa Societa2 = new Societa("Societa2" + nowInMillisecondi, "Via Roma, 20" + nowInMillisecondi,
+				new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2000"));
+		if (Societa2.getId() != null)
+			throw new RuntimeException("testInserisciNuovaSocieta...failed: transient object con id valorizzato");
+
+		societaService.inserisciNuovo(Societa2);
+		if (Societa2.getId() == null || Societa2.getId() < 1)
+			throw new RuntimeException("testInserisciNuovaSocieta...failed: inserimento fallito");
+		
+		Dipendente dipendente = new Dipendente("SAVERIO " + nowInMillisecondi, "CARELLOTTI " + nowInMillisecondi,
+				new SimpleDateFormat("dd-MM-yyyy").parse("24-05-1999"), 54000);
+		dipendente.setSocieta(Societa2);
+		dipendenteService.inserisciNuovo(dipendente);
+		if (dipendente.getId() == null && dipendente.getId() < 1)
+			throw new RuntimeException("testInserisciDipendente failled");
+
+		System.out.println("----- FINE testInserisciNuovoDipendente -----");
+	}
+
 }
