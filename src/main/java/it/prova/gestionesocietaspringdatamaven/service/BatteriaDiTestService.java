@@ -62,6 +62,7 @@ public class BatteriaDiTestService {
 	}
 
 	public void testFindByExampleSocieta() throws Exception {
+
 		System.out.println("----- INIZIO testFindByExampleSocieta -----");
 
 		Long nowInMillisecondi = new Date().getTime();
@@ -85,6 +86,48 @@ public class BatteriaDiTestService {
 			throw new RuntimeException("testFindByExampleSocieta failed: societa non trovata");
 
 		System.out.println("----- FINE testFindByExampleSocieta -----");
+	}
+
+	public void testRimozioneSocietaVaiInRollback() throws Exception {
+		System.out.println("----- INIZIO testRimozioneSocietaVaiInRollback -----");
+
+		Long nowInMillisecondi = new Date().getTime();
+
+		Societa SocietaDaRimuovere = new Societa("SocietaDaRimuovere" + nowInMillisecondi,
+				"Via Firenze, 21" + nowInMillisecondi, new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2000"));
+		if (SocietaDaRimuovere.getId() != null)
+			throw new RuntimeException(
+					"testRimozioneSocietaVaiInRollback...failed: transient object con id valorizzato");
+
+		societaService.inserisciNuovo(SocietaDaRimuovere);
+		if (SocietaDaRimuovere.getId() == null || SocietaDaRimuovere.getId() < 1)
+			throw new RuntimeException("testRimozioneSocietaVaiInRollback...failed");
+
+//		Dipendente dipendente = new Dipendente("CLAUDIO " + nowInMillisecondi, "BUZIOTTI " + nowInMillisecondi,
+//				new SimpleDateFormat("dd-MM-yyyy").parse("24-05-1999"), 54000);
+//		dipendente.setSocieta(SocietaDaRimuovere);
+//		dipendenteService.inserisciNuovo(dipendente);
+//		if (dipendente.getId() == null && dipendente.getId() < 1)
+//			throw new RuntimeException("testRimozioneSocieta... failed");
+
+		try {
+			societaService.removeConEccezione(SocietaDaRimuovere);
+			throw new RuntimeException("testRemoveConEccezioneVaInRollback...failed: eccezione non lanciata");
+		} catch (Exception e) {
+			// se passo di qui è tutto ok
+		}
+
+		if (SocietaDaRimuovere == null || SocietaDaRimuovere.getId() == null)
+			throw new RuntimeException(
+					"testRimozioneSocietaVaiInRollback...failed: cancellazione avvenuta senza rollback");
+
+		societaService.rimuovi(SocietaDaRimuovere);
+
+		if (SocietaDaRimuovere.getDipendenti().size() != 0)
+			throw new RuntimeException(
+					"testRimozioneSocietaVaiInRollback...failed. Impossibile rimuovere: la societa ha dipendenti assegnati");
+
+		System.out.println("----- FINE testRimozioneSocietaVaiInRollback -----");
 	}
 
 }

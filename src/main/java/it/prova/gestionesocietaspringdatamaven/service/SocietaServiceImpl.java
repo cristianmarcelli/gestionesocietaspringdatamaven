@@ -56,4 +56,10 @@ public class SocietaServiceImpl implements SocietaService {
 		return (List<Societa>) societaRepository.findAll(Example.of(example, matcher));
 	}
 
+	@Override
+	public void removeConEccezione(Societa societaInstance) {
+		societaRepository.delete(societaInstance);
+		throw new RuntimeException("Eccezione di prova transazione");
+	}
+
 }

@@ -21,9 +21,10 @@ public class GestionesocietaspringdatamavenApplication implements CommandLineRun
 		System.out.println("################ START   #################");
 		System.out.println("################ eseguo i test  #################");
 
-		batteriaDiTestService.testInserisciNuovaSocieta();
-		batteriaDiTestService.testInserisciNuovoDipendente();
-		batteriaDiTestService.testFindByExampleSocieta();
+//		batteriaDiTestService.testInserisciNuovaSocieta();
+//		batteriaDiTestService.testInserisciNuovoDipendente();
+//		batteriaDiTestService.testFindByExampleSocieta();
+		batteriaDiTestService.testRimozioneSocietaVaiInRollback();
 
 		System.out.println("################ FINE   #################");
 	}
